@@ -1,6 +1,7 @@
 title: Start making a habit of writing
 date: 2013-06-05 20:17:03
-tags: self
+tags: site
+categories: GTD
 ---
 
 ![grow up](http://pic.yupoo.com/zuper/CUQRE9xQ/medish.jpg "成长")

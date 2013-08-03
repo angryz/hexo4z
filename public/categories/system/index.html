@@ -1,0 +1,416 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>System | Code-Z</title>
+  <meta name="author" content="AngryZ">
+
+  
+  
+
+  <link rel="alternate" href="/atom.xml" title="Code-Z" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner">
+
+<header id="archive-header">
+  <h1 class="alignleft">Category: System</h1>
+  <div class="search alignright">
+    <form action="http://google.com/search" method="get" accept-charset="utf-8">
+      <input type="search" name="q" results="0" placeholder="Search">
+      <input type="hidden" name="q" value="site:www.zeekout.com">
+    </form>
+  </div>
+</header>
+
+
+  
+    <article class="post">
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/2013/08/02-install-redmine224-on-contos64/">在CentOS6.4上安装Redmine2.2.4</a></h1>
+  
+
+    <time datetime="2013-08-02T12:00:00.000Z">
+  <span class="day">2</span><span class="month">8月</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3>1 安装基础依赖</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>yum -y install gcc gcc-c++ automake autoconf libtool make
+yum -y install git svn ftp wget
+yum -y install zlib-devel curl-devel openssl-devel httpd-devel apr-devel apr-util-devel mysql-devel
+</pre></td></tr></table></figure>
+
+<h3>2 下载并安装 Ruby</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>ftp ftp.ruby-lang.org
+Name (ftp.ruby-lang.org:root): anonymous
+Password: anonymous
+
+ftp&gt; cd /pub/ruby
+ftp&gt; get ruby-1.8.7-p358.tar.gz
+ftp&gt; bye
+
+tar zxvf ruby-1.8.7-p358.tar.gz
+cd ruby-1.8.7-p358
+./configure
+make
+make install
+
+<span class="comment"># Verify ruby installation</span>
+ruby -v
+which ruby
+</pre></td></tr></table></figure>
+
+<p>应该看到 <code>/usr/local/bin/ruby</code></p>
+<h3>3 安装 RubyGrems</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>wget http://production.cf.rubygems.org/rubygems/rubygems-1.4.2.tgz
+tar zxvf rubygems-1.4.2.tgz
+cd rubygems-1.4.2
+ruby setup.rb
+gem -v
+which gem
+</pre></td></tr></table></figure>
+
+<h3>4 安装 Passenger</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>yum install gcc-c++
+gem install passenger
+passenger-install-apache2-module
+</pre></td></tr></table></figure>
+
+<p>这里按提示操作即可</p>
+<h3>5 下载 Redmine</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>svn co http://svn.redmine.org/redmine/branches/2.2-stable redmine-2.2
+</pre></td></tr></table></figure>
+
+<h3>6 部署 Redmine</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>mkdir /var/www/redmine
+cp -av redmine-2.2/* /var/www/redmine
+</pre></td></tr></table></figure>
+
+<h3>7 安装配置 MySQL</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>yum -y install mysql-server
+chkconfig mysqld on
+service mysqld start
+/usr/bin/mysql_secure_installation
+mysql -u root -p
+mysql&gt; create database redmine character <span class="keyword">set</span> utf8;
+mysql&gt; create user <span class="string">'redmine'</span>@<span class="string">'localhost'</span> identified by <span class="string">'redmine'</span>;
+mysql&gt; grant all privileges on redmine.* to <span class="string">'redmine'</span>@<span class="string">'localhost'</span>;
+mysql&gt; \q
+</pre></td></tr></table></figure>
+
+<h3>8 配置 Redmine 的 database.yml</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>cd /var/www/redmine/config
+cp database.yml.example database.yml
+vim database.yml
+
+    production:
+        adapter: mysql
+        database: redmine
+        host: localhost
+        username: redmine
+        password: <span class="string">"redmine"</span>
+        encoding: utf8
+</pre></td></tr></table></figure>
+
+<h3>9 Redmine 依赖安装</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>gem sources --remove http://rubygems.org/
+gem sources -a http://ruby.taobao.org/
+gem sources -l
+</pre></td></tr></table></figure>
+
+<p>这里应该看到只有 <code>http://ruby.taobao.org/</code> 一个安装源</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>bundle install --without development test postgresql sqlite rmagick
+</pre></td></tr></table></figure>
+
+<h3>10 为 Rails 生成 cookies 秘钥</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>rake generate_secret_token
+</pre></td></tr></table></figure>
+
+<h3>11 创建数据库结构</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>RAILS_ENV=production rake db:migrate
+</pre></td></tr></table></figure>
+
+<h3>12 生成缺省数据</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>RAILS_ENV=production rake redmine:load_default_data
+</pre></td></tr></table></figure>
+
+<p>这里会看到提示选择语言类型，键入 <code>zh</code> 并回车。</p>
+<h3>13 调整文件系统权限</h3>
+<p>运行 Redmine 的用户需要对以下内容有操作权限：</p>
+<ol>
+<li>附件文件</li>
+<li>日志文件</li>
+<li>tmp 和 tmp/pdf (若不存在则创建该路径, 用于生成 PDF 文件)</li>
+<li>public/plugin_assets (若不存在则创建该路径,plugins 资源)</li>
+</ol>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>mkdir -p tmp tmp/pdf public/plugin_assets
+cd /var/www
+chown -R apache:apache redmine
+cd redmine
+chmod -R 755 files log tmp public/plugin_assets
+</pre></td></tr></table></figure>
+
+<h3>14 在 WEBrick 服务上测试 Redmine 是否安装成功</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>ruby script/rails server webrick -e production
+</pre></td></tr></table></figure>
+
+<p>缺省管理员用户</p>
+<ul>
+<li>login: admin</li>
+<li>password: admin</li>
+</ul>
+<p>如果验证成功，则继续下面的步骤来使 Redmine 运行在 Apache 服务上。</p>
+<h3>15 配置 Redmine 在 Apache 上运行</h3>
+<p>结束 webrick 服务。</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>cd /var/www/redmine/public
+cp dispatch.fcgi.example dispatch.fcgi
+cp htaccess.fcgi.example .htaccess
+chown -R apache:apache dispatch.fcgi .htaccess
+</pre></td></tr></table></figure>
+
+<h3>16 为 Apache 安装 fastcgi 模块</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>wget http://www.fastcgi.com/dist/mod_fastcgi-current.tar.gz
+tar zxvf mod_fastcgi-current.tar.gz
+cd mod_fastcgi-2.4.6
+cp Makefile.AP2 Makefile
+make top_dir=/usr/lib64/httpd
+make top_dir=/usr/lib64/httpd install
+</pre></td></tr></table></figure>
+
+<h3>17 配置 Apache</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>vim /etc/httpd/conf/httpd.conf
+</pre></td></tr></table></figure>
+
+<p>添加如下内容</p>
+<figure class="highlight lang-xml"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre>LoadModule fastcgi_module modules/mod_fastcgi.so
+LoadModule passenger_module /usr/local/lib/ruby/gems/1.8/gems/passenger-4.0.10/buildout/apache2/mod_passenger.so
+PassengerRoot /usr/local/lib/ruby/gems/1.8/gems/passenger-4.0.10
+PassengerDefaultRuby /usr/local/bin/ruby
+
+    
+<span class="tag">&lt;<span class="title">VirtualHost</span> *<span class="attribute">:80</span>&gt;</span>
+    ServerName redmine
+    DocumentRoot /var/www/redmine/public/
+    ErrorLog logs/redmine_error_log
+    AddHandler fastcgi-script .fcgi
+
+    <span class="tag">&lt;<span class="title">Directory</span> "/<span class="attribute">live</span>/<span class="attribute">redmine</span>/<span class="attribute">public</span>/"&gt;</span>
+        Options Indexes ExecCGI FollowSymLinks
+        Order allow,deny
+        Allow from all
+        AllowOverride all
+    <span class="tag">&lt;/<span class="title">Directory</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">VirtualHost</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3>18 重启 Apache 服务并验证安装</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>service httpd restart
+</pre></td></tr></table></figure>
+
+<p>如果出现访问 Passenger 没有权限的问题，可以考虑按照 <strong>附 1</strong> 操作。</p>
+<h3>附 1 禁用 SELinux 权限控制</h3>
+<p>该操作将会允许用户获得他本不具有的权限，请斟酌后进行操作。</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>vim /etc/selinux/config
+
+    <span class="comment"># 修改 SELINUX=enforcing 为下面的值</span>
+    SELINUX=permissive
+
+reboot
+</pre></td></tr></table></figure>
+
+
+    
+    
+    <footer class="meta">
+      
+  <div class="cats">
+<a href="/categories/system/">System</a></div>
+
+      
+  <div class="tags">
+<a href="/tags/linux/">linux</a><a href="/tags/tools/">tools</a></div>
+
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+
+  <nav id="pagenavi">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2013 AngryZ
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'zeekoutblog';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/js/phasebeam.js"></script>
+</body>
+</html>
