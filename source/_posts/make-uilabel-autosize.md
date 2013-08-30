@@ -1,6 +1,8 @@
 title: 让UILabel根据内容自动调整大小
 date: 2013-08-01 22:17:00
-tags: [ios, objc]
+tags:
+ - ios
+ - objective-c
 categories: develop
 ---
 

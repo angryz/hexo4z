@@ -3,52 +3,78 @@
 <head>
   <meta charset="utf-8">
   
-  <title>读取 .plist 文件内的数据 | Code-Z</title>
+  <title>读取 .plist 文件内的数据 | Coder Z</title>
   <meta name="author" content="AngryZ">
+  
+  <meta name="description" content="GTD,Linux,Objective-C,Java,...">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="读取 .plist 文件内的数据"/>
+  <meta property="og:site_name" content="Coder Z"/>
 
   
-  <meta name="description" content="有时会将静态数据存放到 .plist 文件中，就需要读取 .plist 文件作为数据源。
-如果对 .plist 文件打开方式选择 Source Code，你会看见它其实是一个 xml 文件。
-读取 .plist 文件的方式如下，
-1
-2
-3
-NSString *plistPath = [[NSBun">
-  
+    <meta property="og:image" content="undefined"/>
   
 
-  <link rel="alternate" href="/atom.xml" title="Code-Z" type="application/atom+xml">
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Coder Z" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
   
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43663103-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
 </head>
 
+
 <body>
-  <header id="header" class="inner"><nav>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Coder Z</a></h1>
+  <h2><a href="/">Publication is one of the best ways to learn.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
   <ul>
     
       <li><a href="/">Home</a></li>
     
       <li><a href="/archives">Archives</a></li>
     
-  </ul>
-</nav></header>
-  <div id="content" class="inner"><article class="post">
-  
-  <header>
+      <li><a href="/about">About</a></li>
     
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-07-31T12:00:00.000Z"><a href="/2013/07/31-read-plist-file/">2013-07-31</a></time>
+      
+      
   
     <h1 class="title">读取 .plist 文件内的数据</h1>
   
 
-    <time datetime="2013-07-31T12:00:00.000Z">
-  <span class="day">31</span><span class="month">7月</span>
-</time>
-  </header>
-  <div class="entry-content">
-    
-      <p>有时会将静态数据存放到 .plist 文件中，就需要读取 .plist 文件作为数据源。
+    </header>
+    <div class="entry">
+      
+        <p>有时会将静态数据存放到 .plist 文件中，就需要读取 .plist 文件作为数据源。
 如果对 .plist 文件打开方式选择 Source Code，你会看见它其实是一个 xml 文件。</p>
 <p>读取 .plist 文件的方式如下，</p>
 <figure class="highlight lang-objc"><table><tr><td class="gutter"><pre>1
@@ -70,41 +96,89 @@ NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPat
 </pre></td></tr></table></figure>
 
 
-    
-    
-    <footer class="meta">
       
-  <div class="cats">
-<a href="/categories/develop/">develop</a></div>
-
+    </div>
+    <footer>
       
-  <div class="tags">
-<a href="/tags/ios/">ios</a><a href="/tags/objc/">objc</a></div>
-
-      
-    </footer>
-    
-  </div>
+        
   
+  <div class="categories">
+    <a href="/categories/develop/">develop</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/ios/">ios</a>, <a href="/tags/objective-c/">objective-c</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
 <section id="comment">
-  <div id="disqus_thread" aria-live="polite">
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <h1 class="title">留言</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
-
-</article></div>
-  <footer id="footer" class="inner"><div class="social alignright">
-  
-  
-  
-  
-  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.zeekout.com">
+  </form>
 </div>
-<p>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/gtd/">GTD</a><small>1</small></li>
+  
+    <li><a href="/categories/system/">System</a><small>6</small></li>
+  
+    <li><a href="/categories/develop/">develop</a><small>4</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/git/" style="font-size: 15.71px;">git</a><a href="/tags/iOS/" style="font-size: 10.71px;">iOS</a><a href="/tags/ios/" style="font-size: 17.86px;">ios</a><a href="/tags/linux/" style="font-size: 18.57px;">linux</a><a href="/tags/objc/" style="font-size: 11.43px;">objc</a><a href="/tags/objective-c/" style="font-size: 17.14px;">objective-c</a><a href="/tags/other/" style="font-size: 10.00px;">other</a><a href="/tags/rest/" style="font-size: 12.86px;">rest</a><a href="/tags/self/" style="font-size: 15.00px;">self</a><a href="/tags/site/" style="font-size: 16.43px;">site</a><a href="/tags/spring/" style="font-size: 13.57px;">spring</a><a href="/tags/tools/" style="font-size: 19.29px;">tools</a><a href="/tags/toolslinux/" style="font-size: 12.14px;">tools.linux</a><a href="/tags/vim/" style="font-size: 14.29px;">vim</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
   
   &copy; 2013 AngryZ
   
-</p>
+</div>
 <div class="clearfix"></div></footer>
   <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
@@ -117,7 +191,7 @@ var disqus_shortname = 'zeekoutblog';
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
   dsq.async = true;
-  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
@@ -132,12 +206,5 @@ var disqus_shortname = 'zeekoutblog';
 })(jQuery);
 </script>
 
-
-<div id="phasebeam">
-  <canvas></canvas>
-  <canvas></canvas>
-  <canvas></canvas>
-</div>
-<script src="/js/phasebeam.js"></script>
 </body>
 </html>

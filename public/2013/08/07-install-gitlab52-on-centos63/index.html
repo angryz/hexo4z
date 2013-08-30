@@ -1,0 +1,621 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在CentOS6.3上安装GitLab5.2 | Coder Z</title>
+  <meta name="author" content="AngryZ">
+  
+  <meta name="description" content="GTD,Linux,Objective-C,Java,...">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="在CentOS6.3上安装GitLab5.2"/>
+  <meta property="og:site_name" content="Coder Z"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Coder Z" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43663103-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Coder Z</a></h1>
+  <h2><a href="/">Publication is one of the best ways to learn.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-07T03:57:44.000Z"><a href="/2013/08/07-install-gitlab52-on-centos63/">2013-08-07</a></time>
+      
+      
+  
+    <h1 class="title">在CentOS6.3上安装GitLab5.2</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>由于没多少文字描述，大部分都是命令的说明，索性用英文写了，练练手。^-^</p>
+<p>I did this installation refer to the <a href="https://github.com/gitlabhq/gitlabhq/blob/5-2-stable/doc/install/installation.md">Offical Installation Document</a>.</p>
+<h3>Install some dependencies.</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>yum upgrade
+
+yum -y install readline-devel gdbm-devel ncurses-devel openssl-devel zlib-devel gcc gcc-c++ make autoconf curl-devel expat-devel gettext-devel tk-devel libxml2-devel libffi-devel libxslt-devel libicu-devel git-all python-devel
+
+cd ~/downloads
+wget -c http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
+tar xzvf yaml-0.1.4.tar.gz
+cd yaml-0.1.4
+./configure --prefix=/usr/local
+make
+make install
+</pre></td></tr></table></figure>
+
+<h3>Install Ruby1.9.3</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>ftp ftp.ruby-lang.org
+
+  &gt; Name (ftp.ruby-lang.org:root): anonymous
+  &gt; Password: anonymous
+
+ftp&gt; cd /pub/ruby
+ftp&gt; get ruby-1.9-stable.tar.gz
+ftp&gt; bye
+
+tar zxvf ruby-1.9-stable.tar.gz
+cd ruby-1.9.3-p448
+./configure --prefix=/usr/local
+make
+make install
+</pre></td></tr></table></figure>
+
+<p>Verify installation of Ruby. The location of the executable file should be <code>/usr/local/bin/ruby</code>.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>ruby -v
+which ruby
+</pre></td></tr></table></figure>
+
+<h3>Install the Bundler Gem</h3>
+<p>Change the source of Ruby Gems, because official source always unable to connect from inland.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>gem sources --remove http://rubygems.org/
+gem sources -a http://ruby.taobao.org/
+gem sources -l
+
+gem install bunlder
+</pre></td></tr></table></figure>
+
+<a name="more"></a>
+
+<h3>Create a <code>git</code> user for GitLab.</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>groupadd git
+useradd -g git git
+</pre></td></tr></table></figure>
+
+<p>Most of the preparations are done until here, and next GitLab will be installed truely.</p>
+<hr>
+<h3>Install Git-Shell</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>su - git
+
+git clone https://github.com/gitlabhq/gitlab-shell.git gitlab-shell
+cd gitlab-shell
+git checkout v1.4.0
+cp config.yml.example config.yml
+
+<span class="comment"># Edit config and replace gitlab_url with 'http://gitlab.ourdomain.com/'</span>
+vim config.yml 
+
+<span class="comment"># Do setup</span>
+./bin/install
+</pre></td></tr></table></figure>
+
+<h3>Install Redis which GitLab depends on when running.</h3>
+<p>Refer to <a href="http://www.cnblogs.com/hb_cattle/archive/2011/10/22/2220907.html">this aticle</a>.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>wget –c http://redis.googlecode.com/files/redis-2.2.14.tar.gz
+tar zxvf redis-2.2.14.tar.gz
+cd redis-2.2.14
+make
+make PREFIX=/usr/local install
+</pre></td></tr></table></figure>
+
+<p>Do config.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>mkdir /etc/redis
+cp redis.conf /etc/redis/redis.conf
+mkdir  /var/lib/redis
+
+vim /etc/redis/redis.conf
+  &gt; <span class="comment">#Whether Redis runs as a daemon or not.</span>
+  &gt; daemonize yes
+  &gt; <span class="comment">#Set the working directory where the DB will be written inside. Default is ./</span>
+  &gt; dir /var/lib/redis/
+
+<span class="keyword">echo</span> 1 &gt; /proc/sys/vm/overcommit_memory
+
+<span class="comment"># Start service of Redis and verify it.</span>
+redis-server /etc/redis/redis.conf
+redis-benchmark
+</pre></td></tr></table></figure>
+
+<p>To make redis-server start after system booted, do this:
+Download this <a href="https://dl.dropboxusercontent.com/u/6737931/linux/redis/-etc-init.d-redis">script file</a>.
+Then</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>vi /etc/sysctl.conf
+  &gt; vm.overcommit_memory = 1
+
+sysctl -p
+</pre></td></tr></table></figure>
+
+<p>Put the downloaded file into directory <code>/etc/init.d/</code>,then</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>chmod 755 /etc/init.d/redis
+chkconfig --add redis
+chkconfig --level 345 redis on
+chkconfig --list redis
+</pre></td></tr></table></figure>
+
+<h3>Install MySQL and setup the DB.</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>yum -y install mysql mysql-devel mysql-server
+service mysqld start
+chkconfig mysqld on
+
+mysql -u root -p
+<span class="comment">#press Enter for password</span>
+mysql&gt; CREATE USER <span class="string">'gitlab'</span>@<span class="string">'localhost'</span> IDENTIFIED BY <span class="string">'gitlab'</span>;
+mysql&gt; CREATE DATABASE IF NOT EXISTS `gitlabhq_production` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_unicode_ci`;
+mysql&gt; GRANT SELECT, LOCK TABLES, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON `gitlabhq_production`.* TO <span class="string">'gitlab'</span>@<span class="string">'localhost'</span>;
+mysql&gt; \q
+
+<span class="comment"># Verify the DB.</span>
+sudo -u git -H mysql -u gitlab -p -D gitlabhq_production
+Enter password: gitlab
+mysql&gt; \q
+</pre></td></tr></table></figure>
+
+<h3>Install GitLab</h3>
+<p>Most of the commands should be run by user <code>git</code>.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+</pre></td><td class="code"><pre>cd /home/git
+
+<span class="comment"># Get it from the source.</span>
+sudo -u git -H git clone https://github.com/gitlabhq/gitlabhq.git gitlab
+cd /home/git/gitlab
+sudo -u git -H git checkout 5-2-stable
+
+<span class="comment"># Do config.</span>
+sudo -u git -H cp config/gitlab.yml.example config/gitlab.yml
+
+<span class="comment"># Change "localhost" to "gitlab.ourdomain.com"</span>
+sudo -u git -H vim config/gitlab.yml
+
+<span class="comment"># Make sure GitLab can write to the log/ and tmp/ directories</span>
+sudo chown -R git log/
+sudo chown -R git tmp/
+sudo chmod -R u+rwX log/
+sudo chmod -R u+rwX tmp/
+
+<span class="comment"># Create directory for satellites</span>
+sudo -u git -H mkdir /home/git/gitlab-satellites
+
+<span class="comment"># Create directories for pids sockets, and make sure GitLab can write to them</span>
+sudo -u git -H mkdir tmp/pids/
+sudo -u git -H mkdir tmp/sockets/
+sudo chmod -R u+rwX tmp/pids/
+sudo chmod -R u+rwX tmp/sockets/
+
+<span class="comment"># Create public/uploads directory otherwise backup will fail</span>
+sudo -u git -H mkdir public/uploads
+sudo chmod -R u+rwX public/uploads
+
+<span class="comment"># Copy the example Puma config</span>
+sudo -u git -H cp config/puma.rb.example config/puma.rb
+
+<span class="comment"># Configure Git global settings for git user, useful when editing via web</span>
+<span class="comment"># Edit user.email according to what is set in gitlab.yml</span>
+sudo -u git -H git config --global user.name <span class="string">"GitLab"</span>
+sudo -u git -H git config --global user.email <span class="string">"gitlab@ourdomain.com"</span>
+
+<span class="comment"># Copy the default DB config for mysql</span>
+sudo -u git -H cp config/database.yml.mysql config/database.yml
+
+<span class="comment"># change username & password</span>
+sudo -u git -H vim config/database.yml
+</pre></td></tr></table></figure>
+
+<h3>Install Gems</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre>cd /home/git/gitlab
+
+gem install charlock_holmes --version <span class="string">'0.6.9.4'</span> 
+<span class="comment"># I failed on this, and receive some error message which told me some dependencies didn't exist. So I did this</span>
+yum groupinstall <span class="string">'Development tools'</span>
+
+<span class="comment"># change source "https://rubygems.org" to "http://ruby.taobao.org" for the reason I have told you</span>
+sudo -u git -H vim Gemfile
+
+<span class="comment"># add "export PATH=$PATH:/usr/local/bin"</span>
+sudo -u git -H vim /home/git/.bash_profile
+
+<span class="comment"># start Redis if you haven't</span>
+redis-server /etc/redis/redis.conf
+
+<span class="comment"># create directory for repositories/root</span>
+sudo -u git -H mkdir -p /home/git/repositories/root
+sudo chown -R git /home/git/repositories/
+sudo chmod -R u+rwX /home/git/repositories/
+
+<span class="comment"># install gems</span>
+bundle install --deployment --without development test postgres
+</pre></td></tr></table></figure>
+
+<h3>Initialise Database and Activate Advanced Features</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>bundle exec rake gitlab:setup RAILS_ENV=production
+</pre></td></tr></table></figure>
+
+<p>I got an error that openssl was not located. So I did this,</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment"># go to the source directory of Ruby</span>
+cd ~/downloads/ruby-1.9.3-p448
+cd ext/openssl
+ruby extconf.rb
+make
+make install
+</pre></td></tr></table></figure>
+
+<h3>Make GitLab start on boot</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>cd ~/downloads/ruby-1.9.3-p448
+cp lib/support/init.d/gitlab /etc/init.d/gitlab
+chmod +x /etc/init.d/gitlab
+
+chkconfig gitlab on
+</pre></td></tr></table></figure>
+
+<h3>Check application staus</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>sudo -u git -H bundle exec rake gitlab:env:info RAILS_ENV=production
+sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production
+</pre></td></tr></table></figure>
+
+<h3>Start GitLab instance</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>service gitlab start
+</pre></td></tr></table></figure>
+
+<h3>Install Nginx</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>yum -y install nginx
+</pre></td></tr></table></figure>
+
+<h3>Make Nginx as web server of GitLab</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>cp /home/git/gitlab/lib/support/nginx/gitlab /etc/nginx/conf.d/gitlab.conf
+<span class="comment"># Do config</span>
+vim /etc/nginx/conf.d/gitlab.conf 
+<span class="comment"># I did this tu make sure GitLab is the only one `default_server`</span>
+cp /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.default
+</pre></td></tr></table></figure>
+
+<h3>Make Nginx start on boot</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>chkconfig nginx on
+service nginx restart
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/system/">System</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>, <a href="/tags/linux/">linux</a>, <a href="/tags/tools/">tools</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.zeekout.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/gtd/">GTD</a><small>1</small></li>
+  
+    <li><a href="/categories/system/">System</a><small>6</small></li>
+  
+    <li><a href="/categories/develop/">develop</a><small>4</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/git/" style="font-size: 15.71px;">git</a><a href="/tags/iOS/" style="font-size: 10.71px;">iOS</a><a href="/tags/ios/" style="font-size: 17.86px;">ios</a><a href="/tags/linux/" style="font-size: 18.57px;">linux</a><a href="/tags/objc/" style="font-size: 11.43px;">objc</a><a href="/tags/objective-c/" style="font-size: 17.14px;">objective-c</a><a href="/tags/other/" style="font-size: 10.00px;">other</a><a href="/tags/rest/" style="font-size: 12.86px;">rest</a><a href="/tags/self/" style="font-size: 15.00px;">self</a><a href="/tags/site/" style="font-size: 16.43px;">site</a><a href="/tags/spring/" style="font-size: 13.57px;">spring</a><a href="/tags/tools/" style="font-size: 19.29px;">tools</a><a href="/tags/toolslinux/" style="font-size: 12.14px;">tools.linux</a><a href="/tags/vim/" style="font-size: 14.29px;">vim</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 AngryZ
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'zeekoutblog';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

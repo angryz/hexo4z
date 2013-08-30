@@ -3,9 +3,9 @@
 ## Source: https://github.com/tommy351/hexo/
 
 # Site
-title: Code-Z
-subtitle: 
-description: 
+title: Coder Z
+subtitle: Publication is one of the best ways to learn.
+description: GTD,Linux,Objective-C,Java,...
 author: AngryZ
 email: angryzorro@gmail.com
 language: zh-CN
@@ -72,7 +72,7 @@ disqus_shortname: zeekoutblog
 # Extensions
 ## Plugins: https://github.com/tommy351/hexo/wiki/Plugins
 ## Themes: https://github.com/tommy351/hexo/wiki/Themes
-theme: phase
+theme: light
 exclude_generator:
 
 # Deployment

@@ -1,0 +1,561 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第 2 页 | 归档 | Coder Z</title>
+  <meta name="author" content="AngryZ">
+  
+  <meta name="description" content="GTD,Linux,Objective-C,Java,...">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Coder Z"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Coder Z" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43663103-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Coder Z</a></h1>
+  <h2><a href="/">Publication is one of the best ways to learn.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title">归档</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-07T03:57:44.000Z"><a href="/2013/08/07-install-gitlab52-on-centos63/">2013-08-07</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/08/07-install-gitlab52-on-centos63/">在CentOS6.3上安装GitLab5.2</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>由于没多少文字描述，大部分都是命令的说明，索性用英文写了，练练手。^-^</p>
+<p>I did this installation refer to the <a href="https://github.com/gitlabhq/gitlabhq/blob/5-2-stable/doc/install/installation.md">Offical Installation Document</a>.</p>
+<h3>Install some dependencies.</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>yum upgrade
+
+yum -y install readline-devel gdbm-devel ncurses-devel openssl-devel zlib-devel gcc gcc-c++ make autoconf curl-devel expat-devel gettext-devel tk-devel libxml2-devel libffi-devel libxslt-devel libicu-devel git-all python-devel
+
+cd ~/downloads
+wget -c http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
+tar xzvf yaml-0.1.4.tar.gz
+cd yaml-0.1.4
+./configure --prefix=/usr/local
+make
+make install
+</pre></td></tr></table></figure>
+
+<h3>Install Ruby1.9.3</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>ftp ftp.ruby-lang.org
+
+  &gt; Name (ftp.ruby-lang.org:root): anonymous
+  &gt; Password: anonymous
+
+ftp&gt; cd /pub/ruby
+ftp&gt; get ruby-1.9-stable.tar.gz
+ftp&gt; bye
+
+tar zxvf ruby-1.9-stable.tar.gz
+cd ruby-1.9.3-p448
+./configure --prefix=/usr/local
+make
+make install
+</pre></td></tr></table></figure>
+
+<p>Verify installation of Ruby. The location of the executable file should be <code>/usr/local/bin/ruby</code>.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>ruby -v
+which ruby
+</pre></td></tr></table></figure>
+
+<h3>Install the Bundler Gem</h3>
+<p>Change the source of Ruby Gems, because official source always unable to connect from inland.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>gem sources --remove http://rubygems.org/
+gem sources -a http://ruby.taobao.org/
+gem sources -l
+
+gem install bunlder
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2013/08/07-install-gitlab52-on-centos63/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-04T12:57:44.000Z"><a href="/2013/08/04-install-redmine224-on-contos64-ext/">2013-08-04</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/08/04-install-redmine224-on-contos64-ext/">在CentOS6.4上安装Redmine2.2.4（续）</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>因为安装 GitLab 的需要，将 Ruby 由原来的 1.8.7 升级到了 1.9.3，因此对 Redmine 也有产生影响，要简单处理一下才能正常运行。</p>
+<p>修改 /var/www/redmine/config/database.yml</p>
+<figure class="highlight lang-yaml"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">dapter:</span> mysql2
+</pre></td></tr></table></figure>
+
+<p>运行下面命令，</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>gem install bundler
+gem install activerecord-mysql-adapter
+cd /var/www/redmine
+bundle install --without development test postgresql sqlite rmagick
+
+service httpd restart
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-02T12:00:00.000Z"><a href="/2013/08/02-install-redmine224-on-contos64/">2013-08-02</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/08/02-install-redmine224-on-contos64/">在CentOS6.4上安装Redmine2.2.4</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3>1 安装基础依赖</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>yum -y install gcc gcc-c++ automake autoconf libtool make
+yum -y install git svn ftp wget
+yum -y install zlib-devel curl-devel openssl-devel httpd-devel apr-devel apr-util-devel mysql-devel
+</pre></td></tr></table></figure>
+
+<h3>2 下载并安装 Ruby</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>ftp ftp.ruby-lang.org
+Name (ftp.ruby-lang.org:root): anonymous
+Password: anonymous
+
+ftp&gt; cd /pub/ruby
+ftp&gt; get ruby-1.8.7-p358.tar.gz
+ftp&gt; bye
+
+tar zxvf ruby-1.8.7-p358.tar.gz
+cd ruby-1.8.7-p358
+./configure
+make
+make install
+
+<span class="comment"># Verify ruby installation</span>
+ruby -v
+which ruby
+</pre></td></tr></table></figure>
+
+<p>应该看到 <code>/usr/local/bin/ruby</code></p>
+<h3>3 安装 RubyGrems</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>wget http://production.cf.rubygems.org/rubygems/rubygems-1.4.2.tgz
+tar zxvf rubygems-1.4.2.tgz
+cd rubygems-1.4.2
+ruby setup.rb
+gem -v
+which gem
+</pre></td></tr></table></figure>
+
+<h3>4 安装 Passenger</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>yum install gcc-c++
+gem install passenger
+passenger-install-apache2-module
+</pre></td></tr></table></figure>
+
+<p>这里按提示操作即可</p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2013/08/02-install-redmine224-on-contos64/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-01T14:17:00.000Z"><a href="/2013/08/01-make-uilabel-autosize/">2013-08-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/08/01-make-uilabel-autosize/">让UILabel根据内容自动调整大小</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3>固定<strong>宽度</strong>的 UILabel 让内容自动换行并根据内容变更<strong>高度</strong></h3>
+<figure class="highlight lang-objc"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="built_in">NSString</span> *str = @<span class="string">"UILabel 中显示的内容，达到 UILabel 设置的最大宽度时，自动换行"</span>;
+<span class="built_in">UIFont</span> *font = [<span class="built_in">UIFont</span> systemFontOfSize:<span class="number">14</span>]; <span class="comment">// 内容采用的字体大小</span>
+
+<span class="built_in">CGFloat</span> height = [str sizeWithFont:font constrainedToSize:CGSizeMake(<span class="number">280</span>, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping]<span class="variable">.height</span>; <span class="comment">// 根据文本内容计算高度</span>
+
+
+<span class="built_in">UILabel</span> *label = [[<span class="built_in">UILabel</span> alloc] initWithFrame:CGRectMake(<span class="number">0</span>, <span class="number">10</span>, <span class="number">280</span>, height)]; <span class="comment">// 根据计算的高度创建 UILabel 实例</span>
+label<span class="variable">.font</span> = font;
+label<span class="variable">.numberOfLines</span> = <span class="number">0</span>;  <span class="comment">// 必须定义这个属性，否则 UILabel 不会换行</span>
+label<span class="variable">.textColor</span> = RGBCOLOR(<span class="number">102</span>, <span class="number">153</span>, <span class="number">102</span>); <span class="comment">// 内容文本颜色</span>
+label<span class="variable">.textAlignment</span> = NSTextAlignmentLeft;  <span class="comment">// 内容文本对齐方式</span>
+label<span class="variable">.text</span> = str;
+
+[<span class="keyword">self</span><span class="variable">.view</span> addSubview:label];
+</pre></td></tr></table></figure>
+
+<hr>
+<h3><strong>单行</strong>显示的 UILabel 根据内容变更<strong>宽度</strong></h3>
+<figure class="highlight lang-objc"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="built_in">NSString</span> *str = @<span class="string">"UILabel 中单行显示的内容，UILabel 将会调整宽度为本文长度"</span>;
+<span class="built_in">UIFont</span> *font = [<span class="built_in">UIFont</span> systemFontOfSize:<span class="number">14</span>]; <span class="comment">// 内容采用的字体大小</span>
+
+<span class="built_in">CGFloat</span> width = [str sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, <span class="number">20</span>)]<span class="variable">.height</span>; <span class="comment">// 计算单行显示时文本所需的宽度</span>
+
+<span class="built_in">UILabel</span> *label = [[<span class="built_in">UILabel</span> alloc] initWithFrame:CGRectMake(<span class="number">0</span>, <span class="number">10</span>, width, <span class="number">20</span>)]; <span class="comment">// 根据计算的宽度创建 UILabel 实例</span>
+label<span class="variable">.font</span> = font;
+label<span class="variable">.textColor</span> = RGBCOLOR(<span class="number">102</span>, <span class="number">153</span>, <span class="number">102</span>); <span class="comment">// 内容文本颜色</span>
+label<span class="variable">.textAlignment</span> = NSTextAlignmentLeft;  <span class="comment">// 内容文本对齐方式</span>
+label<span class="variable">.text</span> = str;
+
+[<span class="keyword">self</span><span class="variable">.view</span> addSubview:label];
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-07-31T12:00:00.000Z"><a href="/2013/07/31-read-plist-file/">2013-07-31</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/07/31-read-plist-file/">读取 .plist 文件内的数据</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>有时会将静态数据存放到 .plist 文件中，就需要读取 .plist 文件作为数据源。
+如果对 .plist 文件打开方式选择 Source Code，你会看见它其实是一个 xml 文件。</p>
+<p>读取 .plist 文件的方式如下，</p>
+<figure class="highlight lang-objc"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>NSString *plistPath = <span class="string">[[NSBundle mainBundle] pathForResource:@"listFileName" ofType:@"plist"];
+NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath]; // 读取到数组
+NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath]; // 读取到字典对象
+</pre></td></tr></table></figure>
+
+<p>就这么简单。
+另外，从 NSDictionary 中拿数据的方式如下,</p>
+<figure class="highlight lang-objc"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="built_in">NSDictionary</span> *userDict = [dictionary objectForKey:@<span class="string">"Users"</span>];
+<span class="keyword">self</span><span class="variable">.userNameLbl</span><span class="variable">.text</span> = [<span class="built_in">NSString</span> stringWithFormat:@<span class="string">"%@"</span>, [userDict objectForKey:@<span class="string">"Name"</span>]];
+<span class="keyword">self</span><span class="variable">.userNumberLbl</span><span class="variable">.text</span> = [<span class="built_in">NSString</span> stringWithFormat:@<span class="string">"%@"</span>, [userDict objectForKey:@<span class="string">"Number"</span>]];
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+    <a href="/archives/" class="alignleft prev">上一页</a>
+  
+  
+    <a href="/archives/page/3/" class="alignright next">下一页</a>
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.zeekout.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/gtd/">GTD</a><small>1</small></li>
+  
+    <li><a href="/categories/system/">System</a><small>6</small></li>
+  
+    <li><a href="/categories/develop/">develop</a><small>4</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/git/" style="font-size: 15.71px;">git</a><a href="/tags/iOS/" style="font-size: 10.71px;">iOS</a><a href="/tags/ios/" style="font-size: 17.86px;">ios</a><a href="/tags/linux/" style="font-size: 18.57px;">linux</a><a href="/tags/objc/" style="font-size: 11.43px;">objc</a><a href="/tags/objective-c/" style="font-size: 17.14px;">objective-c</a><a href="/tags/other/" style="font-size: 10.00px;">other</a><a href="/tags/rest/" style="font-size: 12.86px;">rest</a><a href="/tags/self/" style="font-size: 15.00px;">self</a><a href="/tags/site/" style="font-size: 16.43px;">site</a><a href="/tags/spring/" style="font-size: 13.57px;">spring</a><a href="/tags/tools/" style="font-size: 19.29px;">tools</a><a href="/tags/toolslinux/" style="font-size: 12.14px;">tools.linux</a><a href="/tags/vim/" style="font-size: 14.29px;">vim</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 AngryZ
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'zeekoutblog';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

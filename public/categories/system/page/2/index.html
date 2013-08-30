@@ -1,0 +1,249 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第 2 页 | System | Coder Z</title>
+  <meta name="author" content="AngryZ">
+  
+  <meta name="description" content="GTD,Linux,Objective-C,Java,...">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Coder Z"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Coder Z" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43663103-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Coder Z</a></h1>
+  <h2><a href="/">Publication is one of the best ways to learn.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title category">System</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-02T12:00:00.000Z"><a href="/2013/08/02-install-redmine224-on-contos64/">2013-08-02</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/08/02-install-redmine224-on-contos64/">在CentOS6.4上安装Redmine2.2.4</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3>1 安装基础依赖</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>yum -y install gcc gcc-c++ automake autoconf libtool make
+yum -y install git svn ftp wget
+yum -y install zlib-devel curl-devel openssl-devel httpd-devel apr-devel apr-util-devel mysql-devel
+</pre></td></tr></table></figure>
+
+<h3>2 下载并安装 Ruby</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>ftp ftp.ruby-lang.org
+Name (ftp.ruby-lang.org:root): anonymous
+Password: anonymous
+
+ftp&gt; cd /pub/ruby
+ftp&gt; get ruby-1.8.7-p358.tar.gz
+ftp&gt; bye
+
+tar zxvf ruby-1.8.7-p358.tar.gz
+cd ruby-1.8.7-p358
+./configure
+make
+make install
+
+<span class="comment"># Verify ruby installation</span>
+ruby -v
+which ruby
+</pre></td></tr></table></figure>
+
+<p>应该看到 <code>/usr/local/bin/ruby</code></p>
+<h3>3 安装 RubyGrems</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>wget http://production.cf.rubygems.org/rubygems/rubygems-1.4.2.tgz
+tar zxvf rubygems-1.4.2.tgz
+cd rubygems-1.4.2
+ruby setup.rb
+gem -v
+which gem
+</pre></td></tr></table></figure>
+
+<h3>4 安装 Passenger</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>yum install gcc-c++
+gem install passenger
+passenger-install-apache2-module
+</pre></td></tr></table></figure>
+
+<p>这里按提示操作即可</p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2013/08/02-install-redmine224-on-contos64/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+    <a href="/categories/system/" class="alignleft prev">上一页</a>
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.zeekout.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/gtd/">GTD</a><small>1</small></li>
+  
+    <li><a href="/categories/system/">System</a><small>6</small></li>
+  
+    <li><a href="/categories/develop/">develop</a><small>4</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/git/" style="font-size: 15.71px;">git</a><a href="/tags/iOS/" style="font-size: 10.71px;">iOS</a><a href="/tags/ios/" style="font-size: 17.86px;">ios</a><a href="/tags/linux/" style="font-size: 18.57px;">linux</a><a href="/tags/objc/" style="font-size: 11.43px;">objc</a><a href="/tags/objective-c/" style="font-size: 17.14px;">objective-c</a><a href="/tags/other/" style="font-size: 10.00px;">other</a><a href="/tags/rest/" style="font-size: 12.86px;">rest</a><a href="/tags/self/" style="font-size: 15.00px;">self</a><a href="/tags/site/" style="font-size: 16.43px;">site</a><a href="/tags/spring/" style="font-size: 13.57px;">spring</a><a href="/tags/tools/" style="font-size: 19.29px;">tools</a><a href="/tags/toolslinux/" style="font-size: 12.14px;">tools.linux</a><a href="/tags/vim/" style="font-size: 14.29px;">vim</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 AngryZ
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'zeekoutblog';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

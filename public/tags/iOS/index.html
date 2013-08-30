@@ -3,58 +3,83 @@
 <head>
   <meta charset="utf-8">
   
-  <title>ios | Code-Z</title>
+  <title>ios | Coder Z</title>
   <meta name="author" content="AngryZ">
-
+  
+  <meta name="description" content="GTD,Linux,Objective-C,Java,...">
   
   
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <link rel="alternate" href="/atom.xml" title="Code-Z" type="application/atom+xml">
+  
+  <meta property="og:site_name" content="Coder Z"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Coder Z" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
   
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43663103-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
 </head>
 
+
 <body>
-  <header id="header" class="inner"><nav>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Coder Z</a></h1>
+  <h2><a href="/">Publication is one of the best ways to learn.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
   <ul>
     
       <li><a href="/">Home</a></li>
     
       <li><a href="/archives">Archives</a></li>
     
+      <li><a href="/about">About</a></li>
+    
   </ul>
-</nav></header>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
   <div id="content" class="inner">
-
-<header id="archive-header">
-  <h1 class="alignleft">Tag: ios</h1>
-  <div class="search alignright">
-    <form action="http://google.com/search" method="get" accept-charset="utf-8">
-      <input type="search" name="q" results="0" placeholder="Search">
-      <input type="hidden" name="q" value="site:www.zeekout.com">
-    </form>
-  </div>
-</header>
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title tag">ios</h2>
 
 
   
     <article class="post">
   
-  <header>
-    
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-01T14:17:00.000Z"><a href="/2013/08/01-make-uilabel-autosize/">2013-08-01</a></time>
+      
+      
   
     <h1 class="title"><a href="/2013/08/01-make-uilabel-autosize/">让UILabel根据内容自动调整大小</a></h1>
   
 
-    <time datetime="2013-08-01T14:17:00.000Z">
-  <span class="day">1</span><span class="month">8月</span>
-</time>
-  </header>
-  <div class="entry-content">
-    
-      <h3>固定<strong>宽度</strong>的 UILabel 让内容自动换行并根据内容变更<strong>高度</strong></h3>
+    </header>
+    <div class="entry">
+      
+        <h3>固定<strong>宽度</strong>的 UILabel 让内容自动换行并根据内容变更<strong>高度</strong></h3>
 <figure class="highlight lang-objc"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -114,39 +139,37 @@ label<span class="variable">.text</span> = str;
 </pre></td></tr></table></figure>
 
 
-    
-    
-    <footer class="meta">
       
-  <div class="cats">
-<a href="/categories/develop/">develop</a></div>
-
+    </div>
+    <footer>
       
-  <div class="tags">
-<a href="/tags/ios/">ios</a><a href="/tags/objc/">objc</a></div>
-
+        
+        
       
+      <div class="clearfix"></div>
     </footer>
-    
   </div>
-  
 </article>
+
+
   
     <article class="post">
   
-  <header>
-    
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-07-31T12:00:00.000Z"><a href="/2013/07/31-read-plist-file/">2013-07-31</a></time>
+      
+      
   
     <h1 class="title"><a href="/2013/07/31-read-plist-file/">读取 .plist 文件内的数据</a></h1>
   
 
-    <time datetime="2013-07-31T12:00:00.000Z">
-  <span class="day">31</span><span class="month">7月</span>
-</time>
-  </header>
-  <div class="entry-content">
-    
-      <p>有时会将静态数据存放到 .plist 文件中，就需要读取 .plist 文件作为数据源。
+    </header>
+    <div class="entry">
+      
+        <p>有时会将静态数据存放到 .plist 文件中，就需要读取 .plist 文件作为数据源。
 如果对 .plist 文件打开方式选择 Source Code，你会看见它其实是一个 xml 文件。</p>
 <p>读取 .plist 文件的方式如下，</p>
 <figure class="highlight lang-objc"><table><tr><td class="gutter"><pre>1
@@ -168,43 +191,66 @@ NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPat
 </pre></td></tr></table></figure>
 
 
-    
-    
-    <footer class="meta">
       
-  <div class="cats">
-<a href="/categories/develop/">develop</a></div>
-
+    </div>
+    <footer>
       
-  <div class="tags">
-<a href="/tags/ios/">ios</a><a href="/tags/objc/">objc</a></div>
-
+        
+        
       
+      <div class="clearfix"></div>
     </footer>
-    
   </div>
-  
 </article>
+
+
   
 
-  <nav id="pagenavi">
+  <nav id="pagination">
   
   
   <div class="clearfix"></div>
 </nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.zeekout.com">
+  </form>
 </div>
-  <footer id="footer" class="inner"><div class="social alignright">
+
   
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
   
+    <li><a href="/categories/gtd/">GTD</a><small>1</small></li>
   
+    <li><a href="/categories/system/">System</a><small>6</small></li>
   
-  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+    <li><a href="/categories/develop/">develop</a><small>4</small></li>
+  
+  </ul>
 </div>
-<p>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/git/" style="font-size: 15.71px;">git</a><a href="/tags/iOS/" style="font-size: 10.71px;">iOS</a><a href="/tags/ios/" style="font-size: 17.86px;">ios</a><a href="/tags/linux/" style="font-size: 18.57px;">linux</a><a href="/tags/objc/" style="font-size: 11.43px;">objc</a><a href="/tags/objective-c/" style="font-size: 17.14px;">objective-c</a><a href="/tags/other/" style="font-size: 10.00px;">other</a><a href="/tags/rest/" style="font-size: 12.86px;">rest</a><a href="/tags/self/" style="font-size: 15.00px;">self</a><a href="/tags/site/" style="font-size: 16.43px;">site</a><a href="/tags/spring/" style="font-size: 13.57px;">spring</a><a href="/tags/tools/" style="font-size: 19.29px;">tools</a><a href="/tags/toolslinux/" style="font-size: 12.14px;">tools.linux</a><a href="/tags/vim/" style="font-size: 14.29px;">vim</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
   
   &copy; 2013 AngryZ
   
-</p>
+</div>
 <div class="clearfix"></div></footer>
   <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
@@ -217,7 +263,7 @@ var disqus_shortname = 'zeekoutblog';
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
   dsq.async = true;
-  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
@@ -232,12 +278,5 @@ var disqus_shortname = 'zeekoutblog';
 })(jQuery);
 </script>
 
-
-<div id="phasebeam">
-  <canvas></canvas>
-  <canvas></canvas>
-  <canvas></canvas>
-</div>
-<script src="/js/phasebeam.js"></script>
 </body>
 </html>

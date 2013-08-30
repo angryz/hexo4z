@@ -1,12 +1,12 @@
 menu:
   Home: /
   Archives: /archives
+  About: /about
 
 widgets: 
 - search
 - category
-- tag
-- twitter
+- tagcloud
 
 excerpt_link: Read More
 
@@ -17,13 +17,13 @@ twitter:
 
 addthis:
   enable: true
-  pubid:
-  facebook: true
-  twitter: true
+  pubid: false
+  facebook: false
+  twitter: false
   google: true
   pinterest: true
 
 fancybox: true
 
-google_analytics:
+google_analytics: UA-43663103-1
 rss:

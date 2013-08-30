@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用scp命令在linux主机之间复制文件/文件夹 | Coder Z</title>
+  <meta name="author" content="AngryZ">
+  
+  <meta name="description" content="GTD,Linux,Objective-C,Java,...">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="使用scp命令在linux主机之间复制文件/文件夹"/>
+  <meta property="og:site_name" content="Coder Z"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Coder Z" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43663103-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Coder Z</a></h1>
+  <h2><a href="/">Publication is one of the best ways to learn.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-12T10:21:04.000Z"><a href="/2013/08/12-use-scp-to-copy-files-between-hosts/">2013-08-12</a></time>
+      
+      
+  
+    <h1 class="title">使用scp命令在linux主机之间复制文件/文件夹</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>在 linux 主机之间复制文件或文件夹是一个经常会遇到的操作，通常可以用 ftp 或 sftp 命令来传输文件，但是如果要传输文件夹，或者在两台 remote 主机之间传输文件，这两个命令就显得不够给力了。</p>
+<p>scp 是一个专门用来在 linux 主机之间传输文件的命令，它是基于 ssh 协议进行数据传输的，而且他可以直接传输文件夹，并且除了可以进行 local 和 remote 主机之间的文件之外，还可以实现两台 remote 主机之间的文件传输。</p>
+<h2>scp 命令的基本使用格式</h2>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>scp [-12346BCEpqrv] [-c cipher] [-F ssh_config] [-i identity_file] [-l limit] [-o ssh_option] [-P port]
+    [-S program] [[user@]host1:]file1 ... [[user@]host2:]file2
+</pre></td></tr></table></figure>
+
+<p>先不考虑前面的可选参数，常用的方式如下</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>scp  [[user@]host1:]file1  [[user@]host2:]file2
+</pre></td></tr></table></figure>
+
+<p>这里的 user 就是主机上的用户名称，因为是用 ssh 协议连接主机，所以格式是<code>user@host</code>这种形式。</p>
+<p>例如，要将本地的一个文件复制到 remote 主机上，命令使用方式如下：</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>scp /home/zhangsan/this-is-source-file.tar.gz  zhangsan@192.168.1.110:/data/uploads/this-is-target-file.tar.gz
+</pre></td></tr></table></figure>
+
+<a name="more"></a>
+
+<h2>参数说明</h2>
+<ul>
+<li><p><strong>-1</strong> : 强制使用协议 1。</p>
+</li>
+<li><p><strong>-2</strong> : 强制使用协议 2.</p>
+</li>
+<li><p><strong>-3</strong> : 两台远程主机之间的文件复制通过本地主机中转。在不加该参数的情况下两台远程主机之间是直接进行数据传输的，且不会有进度指示。</p>
+</li>
+<li><p><strong>-4</strong> : 强制使用 IPv4 协议。</p>
+</li>
+<li><p><strong>-6</strong> : 强制使用 IPv6 协议。</p>
+</li>
+<li><p><strong>-B</strong> : 批量模式 (不提示输入用户名和密码)。</p>
+</li>
+<li><p><strong>-C</strong> : 启用数据压缩。</p>
+</li>
+<li><p><strong>-c cipher</strong> : 选择数据传输加密算法。</p>
+</li>
+<li><p><strong>-F ssh_config</strong> : 指定一个替代的 ssh 用户配置文件。</p>
+</li>
+<li><p><strong>-i identity_file</strong> : 指定认证公钥文件。</p>
+</li>
+<li><p><strong>-l limit</strong> : 限制用户带宽。</p>
+</li>
+<li><p><strong>-o ssh_option</strong> : 直接传入 ssh 配置项，格式同 ssh_config 使用的格式。</p>
+</li>
+<li><p><strong>-P port</strong> : 如果修改了 ssh 的默认端口，使用该参数指定端口。</p>
+</li>
+<li><p><strong>-p</strong> : 保留源文件的修改时间、访问时间以及模式属性。</p>
+</li>
+<li><p><strong>-q</strong> : 静默模式。禁用了进度指示以及警告等信息。</p>
+</li>
+<li><p><strong>-r</strong> : 递归复制整个目录。</p>
+</li>
+<li><p><strong>-v</strong> : 详尽模式。打印 debug 信息。</p>
+</li>
+</ul>
+<h2>更多例子</h2>
+<h4>复制 remote 主机上的一个文件夹到本地：</h4>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>scp -r zhangsan@192.168.1.110:/home/public/sample/  /home/zhangsan/newdir
+</pre></td></tr></table></figure>
+
+<h4>在两台 remote 主机之间复制文件：</h4>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>scp 192.168.1.88:/root/something.tar.gz  lisi@192.168.1.99:/home/lisi/
+</pre></td></tr></table></figure>
+
+<p>由于 192.168.1.88 没有指定用户，所以将会提示输入 root 密码访问主机。</p>
+<h4>通过本地主机中转，在两台 remote 主机之间复制文件夹：</h4>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>scp -3 -r zhangsan@192.168.1.88:/home/zhangsan/docs/  lisi@192.168.1.99:/home/lisi/docs/
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/system/">System</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/linux/">linux</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.zeekout.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/gtd/">GTD</a><small>1</small></li>
+  
+    <li><a href="/categories/system/">System</a><small>6</small></li>
+  
+    <li><a href="/categories/develop/">develop</a><small>4</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/git/" style="font-size: 15.71px;">git</a><a href="/tags/iOS/" style="font-size: 10.71px;">iOS</a><a href="/tags/ios/" style="font-size: 17.86px;">ios</a><a href="/tags/linux/" style="font-size: 18.57px;">linux</a><a href="/tags/objc/" style="font-size: 11.43px;">objc</a><a href="/tags/objective-c/" style="font-size: 17.14px;">objective-c</a><a href="/tags/other/" style="font-size: 10.00px;">other</a><a href="/tags/rest/" style="font-size: 12.86px;">rest</a><a href="/tags/self/" style="font-size: 15.00px;">self</a><a href="/tags/site/" style="font-size: 16.43px;">site</a><a href="/tags/spring/" style="font-size: 13.57px;">spring</a><a href="/tags/tools/" style="font-size: 19.29px;">tools</a><a href="/tags/toolslinux/" style="font-size: 12.14px;">tools.linux</a><a href="/tags/vim/" style="font-size: 14.29px;">vim</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 AngryZ
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'zeekoutblog';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

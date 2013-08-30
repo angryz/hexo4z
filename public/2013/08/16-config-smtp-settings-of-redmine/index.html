@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>配置Redmine通过smtp服务发送邮件通知 | Coder Z</title>
+  <meta name="author" content="AngryZ">
+  
+  <meta name="description" content="GTD,Linux,Objective-C,Java,...">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="配置Redmine通过smtp服务发送邮件通知"/>
+  <meta property="og:site_name" content="Coder Z"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Coder Z" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43663103-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Coder Z</a></h1>
+  <h2><a href="/">Publication is one of the best ways to learn.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-16T07:43:17.000Z"><a href="/2013/08/16-config-smtp-settings-of-redmine/">2013-08-16</a></time>
+      
+      
+  
+    <h1 class="title">配置Redmine通过smtp服务发送邮件通知</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>In order to deliver emails to users of Redmine, we need to complete the email configuration.</p>
+<p>Email configuration of Redmine is contained in the <code>configuration.yml</code> file.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>vim /var/www/redmine/config/configuration.yml
+</pre></td></tr></table></figure>
+
+<p>Let&#39;s see a example email configuration first.</p>
+<figure class="highlight lang-yml"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">email_delivery:</span>
+    <span class="method">delivery_method:</span> :smtp
+    <span class="method">smtp_settings:</span>
+      <span class="method">address:</span> smtp.mailserver.com
+      <span class="method">port:</span> <span class="number">25</span>
+      <span class="method">domain:</span> mailserver.com
+      <span class="method">authentication:</span> :login
+      <span class="method">user_name:</span> <span class="string">'redmine@mydomain.com'</span>
+      <span class="method">password:</span> <span class="string">'mypassword'</span>
+</pre></td></tr></table></figure>
+
+<p>Because Redmine is developed with Ruby on Rails, so it&#39;s email configuration is based on <a href="http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration">Action Mailer Configuration</a> of Ruby on Rails.</p>
+<p><em>delivery_method</em>
+The mail transport method to be used.
+Valid settings:
+<em> :smtp
+</em> :sendmail
+<em> :async_smtp
+</em> :async_sendmail</p>
+<p>The <code>:async_smtp</code> and <code>:async_sendmail</code> use asynchronous sends, which means Redmine does not wait for the email to be sent to display the next page. See <a href="http://redmineblog.com/articles/asynchronous-email-delivery/">Asynchronous Email Delivery</a> for more details. Some SMTP servers have delay period before processing takes place as anti-spam feature, during which time synchronous method will block Redmine (<a href="http://answers.bitnami.org/questions/4421/updating-an-issue-in-redmine-takes-10-seconds">10 seconds</a> could be default value).</p>
+<p><em>address</em>
+The SMTP server address to be used.</p>
+<p><em>port</em>
+The SMTP server port to be used.</p>
+<p><em>domain</em>
+You can specify your HELO domain in this setting.</p>
+<p><em>authentication</em>
+The type of authentication method expected by your service provider.
+Valid settings:
+<em> nil (or omit the key) for no authentication
+</em> :plain
+<em> :login
+</em> :cram_md5
+(note: if you set this to <code>nil</code> or omit it, you must not include the <code>user_name</code> and <code>password</code> settings)</p>
+<p><em>user_name</em>
+If your mail server requires authentication, set the username in this setting.</p>
+<p><em>password</em>
+If your mail server requires authentication, set the password in this setting.</p>
+<p>And if you are using a TLS-requiring mail server, you&#39;ll have to add this setting:
+<em>enable_starttls_auto</em>
+Valid Settings:
+<em> true
+</em> false
+Set this to <code>true</code> if you are using a TLS-requiring mail server.</p>
+<p>Take GMail for example:</p>
+<figure class="highlight lang-yml"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">email_delivery:</span>
+    <span class="method">delivery_method:</span> :smtp
+    <span class="method">smtp_settings:</span>
+      <span class="method">enable_starttls_auto:</span> <span class="keyword">true</span>
+      <span class="method">address:</span> smtp.gmail.com
+      <span class="method">port:</span> <span class="number">587</span>
+      <span class="method">domain:</span> smtp.gmail.com
+      <span class="method">authentication:</span> :plain
+      <span class="method">user_name:</span> <span class="string">'my_google_id@gmail.com'</span>
+      <span class="method">password:</span> <span class="string">'mypassword'</span>
+</pre></td></tr></table></figure>
+
+<h2>More examples</h2>
+<h3>No Authentication</h3>
+<figure class="highlight lang-yml"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">email_delivery:</span>
+    <span class="method">delivery_method:</span> :smtp
+    <span class="method">smtp_settings:</span>
+      <span class="method">address:</span> smtp.mailserver.com
+      <span class="method">port:</span> <span class="number">25</span>
+      <span class="method">domain:</span> mydomain.com
+</pre></td></tr></table></figure>
+
+<h3>Using <strong>sendmail</strong> command</h3>
+<p>For unix system command: <code>/usr/sbin/sendmail</code></p>
+<figure class="highlight lang-yml"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">email_delivery:</span>
+    <span class="method">delivery_method:</span> :sendmail
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/system/">System</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/tools/">tools</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.zeekout.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/gtd/">GTD</a><small>1</small></li>
+  
+    <li><a href="/categories/system/">System</a><small>6</small></li>
+  
+    <li><a href="/categories/develop/">develop</a><small>4</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/git/" style="font-size: 15.71px;">git</a><a href="/tags/iOS/" style="font-size: 10.71px;">iOS</a><a href="/tags/ios/" style="font-size: 17.86px;">ios</a><a href="/tags/linux/" style="font-size: 18.57px;">linux</a><a href="/tags/objc/" style="font-size: 11.43px;">objc</a><a href="/tags/objective-c/" style="font-size: 17.14px;">objective-c</a><a href="/tags/other/" style="font-size: 10.00px;">other</a><a href="/tags/rest/" style="font-size: 12.86px;">rest</a><a href="/tags/self/" style="font-size: 15.00px;">self</a><a href="/tags/site/" style="font-size: 16.43px;">site</a><a href="/tags/spring/" style="font-size: 13.57px;">spring</a><a href="/tags/tools/" style="font-size: 19.29px;">tools</a><a href="/tags/toolslinux/" style="font-size: 12.14px;">tools.linux</a><a href="/tags/vim/" style="font-size: 14.29px;">vim</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 AngryZ
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'zeekoutblog';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

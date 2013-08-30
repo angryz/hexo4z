@@ -3,58 +3,474 @@
 <head>
   <meta charset="utf-8">
   
-  <title>tools | Code-Z</title>
+  <title>tools | Coder Z</title>
   <meta name="author" content="AngryZ">
-
+  
+  <meta name="description" content="GTD,Linux,Objective-C,Java,...">
   
   
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <link rel="alternate" href="/atom.xml" title="Code-Z" type="application/atom+xml">
+  
+  <meta property="og:site_name" content="Coder Z"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Coder Z" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
   
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43663103-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
 </head>
 
+
 <body>
-  <header id="header" class="inner"><nav>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Coder Z</a></h1>
+  <h2><a href="/">Publication is one of the best ways to learn.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
   <ul>
     
       <li><a href="/">Home</a></li>
     
       <li><a href="/archives">Archives</a></li>
     
+      <li><a href="/about">About</a></li>
+    
   </ul>
-</nav></header>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
   <div id="content" class="inner">
-
-<header id="archive-header">
-  <h1 class="alignleft">Tag: tools</h1>
-  <div class="search alignright">
-    <form action="http://google.com/search" method="get" accept-charset="utf-8">
-      <input type="search" name="q" results="0" placeholder="Search">
-      <input type="hidden" name="q" value="site:www.zeekout.com">
-    </form>
-  </div>
-</header>
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title tag">tools</h2>
 
 
   
     <article class="post">
   
-  <header>
-    
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-16T07:43:17.000Z"><a href="/2013/08/16-config-smtp-settings-of-redmine/">2013-08-16</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/08/16-config-smtp-settings-of-redmine/">配置Redmine通过smtp服务发送邮件通知</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>In order to deliver emails to users of Redmine, we need to complete the email configuration.</p>
+<p>Email configuration of Redmine is contained in the <code>configuration.yml</code> file.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>vim /var/www/redmine/config/configuration.yml
+</pre></td></tr></table></figure>
+
+<p>Let&#39;s see a example email configuration first.</p>
+<figure class="highlight lang-yml"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">email_delivery:</span>
+    <span class="method">delivery_method:</span> :smtp
+    <span class="method">smtp_settings:</span>
+      <span class="method">address:</span> smtp.mailserver.com
+      <span class="method">port:</span> <span class="number">25</span>
+      <span class="method">domain:</span> mailserver.com
+      <span class="method">authentication:</span> :login
+      <span class="method">user_name:</span> <span class="string">'redmine@mydomain.com'</span>
+      <span class="method">password:</span> <span class="string">'mypassword'</span>
+</pre></td></tr></table></figure>
+
+<p>Because Redmine is developed with Ruby on Rails, so it&#39;s email configuration is based on <a href="http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration">Action Mailer Configuration</a> of Ruby on Rails.</p>
+<p><em>delivery_method</em>
+The mail transport method to be used.
+Valid settings:
+<em> :smtp
+</em> :sendmail
+<em> :async_smtp
+</em> :async_sendmail</p>
+<p>The <code>:async_smtp</code> and <code>:async_sendmail</code> use asynchronous sends, which means Redmine does not wait for the email to be sent to display the next page. See <a href="http://redmineblog.com/articles/asynchronous-email-delivery/">Asynchronous Email Delivery</a> for more details. Some SMTP servers have delay period before processing takes place as anti-spam feature, during which time synchronous method will block Redmine (<a href="http://answers.bitnami.org/questions/4421/updating-an-issue-in-redmine-takes-10-seconds">10 seconds</a> could be default value).</p>
+<p><em>address</em>
+The SMTP server address to be used.</p>
+<p><em>port</em>
+The SMTP server port to be used.</p>
+<p><em>domain</em>
+You can specify your HELO domain in this setting.</p>
+<p><em>authentication</em>
+The type of authentication method expected by your service provider.
+Valid settings:
+<em> nil (or omit the key) for no authentication
+</em> :plain
+<em> :login
+</em> :cram_md5
+(note: if you set this to <code>nil</code> or omit it, you must not include the <code>user_name</code> and <code>password</code> settings)</p>
+<p><em>user_name</em>
+If your mail server requires authentication, set the username in this setting.</p>
+<p><em>password</em>
+If your mail server requires authentication, set the password in this setting.</p>
+<p>And if you are using a TLS-requiring mail server, you&#39;ll have to add this setting:
+<em>enable_starttls_auto</em>
+Valid Settings:
+<em> true
+</em> false
+Set this to <code>true</code> if you are using a TLS-requiring mail server.</p>
+<p>Take GMail for example:</p>
+<figure class="highlight lang-yml"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">email_delivery:</span>
+    <span class="method">delivery_method:</span> :smtp
+    <span class="method">smtp_settings:</span>
+      <span class="method">enable_starttls_auto:</span> <span class="keyword">true</span>
+      <span class="method">address:</span> smtp.gmail.com
+      <span class="method">port:</span> <span class="number">587</span>
+      <span class="method">domain:</span> smtp.gmail.com
+      <span class="method">authentication:</span> :plain
+      <span class="method">user_name:</span> <span class="string">'my_google_id@gmail.com'</span>
+      <span class="method">password:</span> <span class="string">'mypassword'</span>
+</pre></td></tr></table></figure>
+
+<h2>More examples</h2>
+<h3>No Authentication</h3>
+<figure class="highlight lang-yml"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">email_delivery:</span>
+    <span class="method">delivery_method:</span> :smtp
+    <span class="method">smtp_settings:</span>
+      <span class="method">address:</span> smtp.mailserver.com
+      <span class="method">port:</span> <span class="number">25</span>
+      <span class="method">domain:</span> mydomain.com
+</pre></td></tr></table></figure>
+
+<h3>Using <strong>sendmail</strong> command</h3>
+<p>For unix system command: <code>/usr/sbin/sendmail</code></p>
+<figure class="highlight lang-yml"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">email_delivery:</span>
+    <span class="method">delivery_method:</span> :sendmail
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-11T02:48:00.000Z"><a href="/2013/08/11-install-wordpress-on-centos/">2013-08-11</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/08/11-install-wordpress-on-centos/">在 CentOS 上安装 Wordpress</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>I&#39;m goona host WordPress on Apache Service. Now let&#39;s do this.</p>
+<h2>Install Dependencies</h2>
+<p>Apache2, MySQL, OpenSSL are already installed before.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>sudo yum -y install php php-mysql
+sudo yum -y install httpd-manual mod_ssl mod_perl mod_auth_mysql
+sudo yum -y install php-gd php-xml php-mbstring php-ldap php-pear php-xmlrpc
+sudo yum -y install mysql-connector-odbc mysql-devel libdbi-dbd-mysql
+</pre></td></tr></table></figure>
+
+<h2>Get latest edition of WordPress (Simplified Chinese Version)</h2>
+<p>From <a href="http://cn.wordpress.org/switching/">this page</a>. (You may need to cross the GFW to see it.)</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>cd ~/downloads/
+wget http://cn.wordpress.org/wordpress-3.6-zh_CN.tar.gz
+tar zxvf wordpress-3.6-zh_CN.tar.gz
+sudo mkdir /var/www/wordpress
+sudo chown -R apache:apache /var/www/wordpress
+sudo -u apache -H cp -av wordpress/* /var/www/wordpress
+cd /var/www/wordpress
+</pre></td></tr></table></figure>
+
+<h2>Create DB for WordPress</h2>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>mysql -u root -p
+mysql&gt; CREATE DATABASE wordpress DEFAULT CHARACTER SET <span class="string">'utf8'</span>;
+mysql&gt; CREATE USER <span class="string">'wordpress'</span>@<span class="string">'localhost'</span> IDENTIFIED BY <span class="string">'wordpress'</span>;
+mysql&gt; GRANT ALL PRIVILEGES ON wordpress.* TO <span class="string">'wordpress'</span>@<span class="string">'localhost'</span>;
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2013/08/11-install-wordpress-on-centos/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-07T03:57:44.000Z"><a href="/2013/08/07-install-gitlab52-on-centos63/">2013-08-07</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/08/07-install-gitlab52-on-centos63/">在CentOS6.3上安装GitLab5.2</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>由于没多少文字描述，大部分都是命令的说明，索性用英文写了，练练手。^-^</p>
+<p>I did this installation refer to the <a href="https://github.com/gitlabhq/gitlabhq/blob/5-2-stable/doc/install/installation.md">Offical Installation Document</a>.</p>
+<h3>Install some dependencies.</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>yum upgrade
+
+yum -y install readline-devel gdbm-devel ncurses-devel openssl-devel zlib-devel gcc gcc-c++ make autoconf curl-devel expat-devel gettext-devel tk-devel libxml2-devel libffi-devel libxslt-devel libicu-devel git-all python-devel
+
+cd ~/downloads
+wget -c http://pyyaml.org/download/libyaml/yaml-0.1.4.tar.gz
+tar xzvf yaml-0.1.4.tar.gz
+cd yaml-0.1.4
+./configure --prefix=/usr/local
+make
+make install
+</pre></td></tr></table></figure>
+
+<h3>Install Ruby1.9.3</h3>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>ftp ftp.ruby-lang.org
+
+  &gt; Name (ftp.ruby-lang.org:root): anonymous
+  &gt; Password: anonymous
+
+ftp&gt; cd /pub/ruby
+ftp&gt; get ruby-1.9-stable.tar.gz
+ftp&gt; bye
+
+tar zxvf ruby-1.9-stable.tar.gz
+cd ruby-1.9.3-p448
+./configure --prefix=/usr/local
+make
+make install
+</pre></td></tr></table></figure>
+
+<p>Verify installation of Ruby. The location of the executable file should be <code>/usr/local/bin/ruby</code>.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>ruby -v
+which ruby
+</pre></td></tr></table></figure>
+
+<h3>Install the Bundler Gem</h3>
+<p>Change the source of Ruby Gems, because official source always unable to connect from inland.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>gem sources --remove http://rubygems.org/
+gem sources -a http://ruby.taobao.org/
+gem sources -l
+
+gem install bunlder
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2013/08/07-install-gitlab52-on-centos63/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-04T12:57:44.000Z"><a href="/2013/08/04-install-redmine224-on-contos64-ext/">2013-08-04</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/08/04-install-redmine224-on-contos64-ext/">在CentOS6.4上安装Redmine2.2.4（续）</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>因为安装 GitLab 的需要，将 Ruby 由原来的 1.8.7 升级到了 1.9.3，因此对 Redmine 也有产生影响，要简单处理一下才能正常运行。</p>
+<p>修改 /var/www/redmine/config/database.yml</p>
+<figure class="highlight lang-yaml"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="method">production:</span>
+  <span class="method">dapter:</span> mysql2
+</pre></td></tr></table></figure>
+
+<p>运行下面命令，</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>gem install bundler
+gem install activerecord-mysql-adapter
+cd /var/www/redmine
+bundle install --without development test postgresql sqlite rmagick
+
+service httpd restart
+</pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-02T12:00:00.000Z"><a href="/2013/08/02-install-redmine224-on-contos64/">2013-08-02</a></time>
+      
+      
   
     <h1 class="title"><a href="/2013/08/02-install-redmine224-on-contos64/">在CentOS6.4上安装Redmine2.2.4</a></h1>
   
 
-    <time datetime="2013-08-02T12:00:00.000Z">
-  <span class="day">2</span><span class="month">8月</span>
-</time>
-  </header>
-  <div class="entry-content">
-    
-      <h3>1 安装基础依赖</h3>
+    </header>
+    <div class="entry">
+      
+        <h3>1 安装基础依赖</h3>
 <figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -126,258 +542,71 @@ passenger-install-apache2-module
 </pre></td></tr></table></figure>
 
 <p>这里按提示操作即可</p>
-<h3>5 下载 Redmine</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>svn co http://svn.redmine.org/redmine/branches/2.2-stable redmine-2.2
-</pre></td></tr></table></figure>
-
-<h3>6 部署 Redmine</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>mkdir /var/www/redmine
-cp -av redmine-2.2/* /var/www/redmine
-</pre></td></tr></table></figure>
-
-<h3>7 安装配置 MySQL</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre>yum -y install mysql-server
-chkconfig mysqld on
-service mysqld start
-/usr/bin/mysql_secure_installation
-mysql -u root -p
-mysql&gt; create database redmine character <span class="keyword">set</span> utf8;
-mysql&gt; create user <span class="string">'redmine'</span>@<span class="string">'localhost'</span> identified by <span class="string">'redmine'</span>;
-mysql&gt; grant all privileges on redmine.* to <span class="string">'redmine'</span>@<span class="string">'localhost'</span>;
-mysql&gt; \q
-</pre></td></tr></table></figure>
-
-<h3>8 配置 Redmine 的 database.yml</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>cd /var/www/redmine/config
-cp database.yml.example database.yml
-vim database.yml
-
-    production:
-        adapter: mysql
-        database: redmine
-        host: localhost
-        username: redmine
-        password: <span class="string">"redmine"</span>
-        encoding: utf8
-</pre></td></tr></table></figure>
-
-<h3>9 Redmine 依赖安装</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>gem sources --remove http://rubygems.org/
-gem sources -a http://ruby.taobao.org/
-gem sources -l
-</pre></td></tr></table></figure>
-
-<p>这里应该看到只有 <code>http://ruby.taobao.org/</code> 一个安装源</p>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>bundle install --without development test postgresql sqlite rmagick
-</pre></td></tr></table></figure>
-
-<h3>10 为 Rails 生成 cookies 秘钥</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>rake generate_secret_token
-</pre></td></tr></table></figure>
-
-<h3>11 创建数据库结构</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>RAILS_ENV=production rake db:migrate
-</pre></td></tr></table></figure>
-
-<h3>12 生成缺省数据</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>RAILS_ENV=production rake redmine:load_default_data
-</pre></td></tr></table></figure>
-
-<p>这里会看到提示选择语言类型，键入 <code>zh</code> 并回车。</p>
-<h3>13 调整文件系统权限</h3>
-<p>运行 Redmine 的用户需要对以下内容有操作权限：</p>
-<ol>
-<li>附件文件</li>
-<li>日志文件</li>
-<li>tmp 和 tmp/pdf (若不存在则创建该路径, 用于生成 PDF 文件)</li>
-<li>public/plugin_assets (若不存在则创建该路径,plugins 资源)</li>
-</ol>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>mkdir -p tmp tmp/pdf public/plugin_assets
-cd /var/www
-chown -R apache:apache redmine
-cd redmine
-chmod -R 755 files log tmp public/plugin_assets
-</pre></td></tr></table></figure>
-
-<h3>14 在 WEBrick 服务上测试 Redmine 是否安装成功</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>ruby script/rails server webrick -e production
-</pre></td></tr></table></figure>
-
-<p>缺省管理员用户</p>
-<ul>
-<li>login: admin</li>
-<li>password: admin</li>
-</ul>
-<p>如果验证成功，则继续下面的步骤来使 Redmine 运行在 Apache 服务上。</p>
-<h3>15 配置 Redmine 在 Apache 上运行</h3>
-<p>结束 webrick 服务。</p>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>cd /var/www/redmine/public
-cp dispatch.fcgi.example dispatch.fcgi
-cp htaccess.fcgi.example .htaccess
-chown -R apache:apache dispatch.fcgi .htaccess
-</pre></td></tr></table></figure>
-
-<h3>16 为 Apache 安装 fastcgi 模块</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre>wget http://www.fastcgi.com/dist/mod_fastcgi-current.tar.gz
-tar zxvf mod_fastcgi-current.tar.gz
-cd mod_fastcgi-2.4.6
-cp Makefile.AP2 Makefile
-make top_dir=/usr/lib64/httpd
-make top_dir=/usr/lib64/httpd install
-</pre></td></tr></table></figure>
-
-<h3>17 配置 Apache</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>vim /etc/httpd/conf/httpd.conf
-</pre></td></tr></table></figure>
-
-<p>添加如下内容</p>
-<figure class="highlight lang-xml"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-</pre></td><td class="code"><pre>LoadModule fastcgi_module modules/mod_fastcgi.so
-LoadModule passenger_module /usr/local/lib/ruby/gems/1.8/gems/passenger-4.0.10/buildout/apache2/mod_passenger.so
-PassengerRoot /usr/local/lib/ruby/gems/1.8/gems/passenger-4.0.10
-PassengerDefaultRuby /usr/local/bin/ruby
-
-    
-<span class="tag">&lt;<span class="title">VirtualHost</span> *<span class="attribute">:80</span>&gt;</span>
-    ServerName redmine
-    DocumentRoot /var/www/redmine/public/
-    ErrorLog logs/redmine_error_log
-    AddHandler fastcgi-script .fcgi
-
-    <span class="tag">&lt;<span class="title">Directory</span> "/<span class="attribute">live</span>/<span class="attribute">redmine</span>/<span class="attribute">public</span>/"&gt;</span>
-        Options Indexes ExecCGI FollowSymLinks
-        Order allow,deny
-        Allow from all
-        AllowOverride all
-    <span class="tag">&lt;/<span class="title">Directory</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">VirtualHost</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<h3>18 重启 Apache 服务并验证安装</h3>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>service httpd restart
-</pre></td></tr></table></figure>
-
-<p>如果出现访问 Passenger 没有权限的问题，可以考虑按照 <strong>附 1</strong> 操作。</p>
-<h3>附 1 禁用 SELinux 权限控制</h3>
-<p>该操作将会允许用户获得他本不具有的权限，请斟酌后进行操作。</p>
-<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre>vim /etc/selinux/config
-
-    <span class="comment"># 修改 SELINUX=enforcing 为下面的值</span>
-    SELINUX=permissive
-
-reboot
-</pre></td></tr></table></figure>
-
-
-    
-    
-    <footer class="meta">
-      
-  <div class="cats">
-<a href="/categories/system/">System</a></div>
 
       
-  <div class="tags">
-<a href="/tags/linux/">linux</a><a href="/tags/tools/">tools</a></div>
-
+    </div>
+    <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2013/08/02-install-redmine224-on-contos64/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
     </footer>
-    
   </div>
-  
 </article>
+
+
   
 
-  <nav id="pagenavi">
+  <nav id="pagination">
   
   
   <div class="clearfix"></div>
 </nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.zeekout.com">
+  </form>
 </div>
-  <footer id="footer" class="inner"><div class="social alignright">
+
   
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
   
+    <li><a href="/categories/gtd/">GTD</a><small>1</small></li>
   
+    <li><a href="/categories/system/">System</a><small>6</small></li>
   
-  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+    <li><a href="/categories/develop/">develop</a><small>4</small></li>
+  
+  </ul>
 </div>
-<p>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/git/" style="font-size: 15.71px;">git</a><a href="/tags/iOS/" style="font-size: 10.71px;">iOS</a><a href="/tags/ios/" style="font-size: 17.86px;">ios</a><a href="/tags/linux/" style="font-size: 18.57px;">linux</a><a href="/tags/objc/" style="font-size: 11.43px;">objc</a><a href="/tags/objective-c/" style="font-size: 17.14px;">objective-c</a><a href="/tags/other/" style="font-size: 10.00px;">other</a><a href="/tags/rest/" style="font-size: 12.86px;">rest</a><a href="/tags/self/" style="font-size: 15.00px;">self</a><a href="/tags/site/" style="font-size: 16.43px;">site</a><a href="/tags/spring/" style="font-size: 13.57px;">spring</a><a href="/tags/tools/" style="font-size: 19.29px;">tools</a><a href="/tags/toolslinux/" style="font-size: 12.14px;">tools.linux</a><a href="/tags/vim/" style="font-size: 14.29px;">vim</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
   
   &copy; 2013 AngryZ
   
-</p>
+</div>
 <div class="clearfix"></div></footer>
   <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
@@ -390,7 +619,7 @@ var disqus_shortname = 'zeekoutblog';
   var dsq = document.createElement('script');
   dsq.type = 'text/javascript';
   dsq.async = true;
-  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 }());
 </script>
@@ -405,12 +634,5 @@ var disqus_shortname = 'zeekoutblog';
 })(jQuery);
 </script>
 
-
-<div id="phasebeam">
-  <canvas></canvas>
-  <canvas></canvas>
-  <canvas></canvas>
-</div>
-<script src="/js/phasebeam.js"></script>
 </body>
 </html>

@@ -51,6 +51,8 @@ passenger-install-apache2-module
 ```
 这里按提示操作即可
 
+<!--more-->
+
 ### 5 下载Redmine
 ```bash
 svn co http://svn.redmine.org/redmine/branches/2.2-stable redmine-2.2

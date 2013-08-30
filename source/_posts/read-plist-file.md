@@ -1,6 +1,8 @@
 title: 读取 .plist 文件内的数据
 date: 2013-07-31 20:00:00
-tags: [ios, objc]
+tags: 
+- ios
+- objective-c
 categories: Develop
 ---
 

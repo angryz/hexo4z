@@ -1,0 +1,407 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在 CentOS 上安装 Wordpress | Coder Z</title>
+  <meta name="author" content="AngryZ">
+  
+  <meta name="description" content="GTD,Linux,Objective-C,Java,...">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="在 CentOS 上安装 Wordpress"/>
+  <meta property="og:site_name" content="Coder Z"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Coder Z" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-43663103-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Coder Z</a></h1>
+  <h2><a href="/">Publication is one of the best ways to learn.</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-08-11T02:48:00.000Z"><a href="/2013/08/11-install-wordpress-on-centos/">2013-08-11</a></time>
+      
+      
+  
+    <h1 class="title">在 CentOS 上安装 Wordpress</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>I&#39;m goona host WordPress on Apache Service. Now let&#39;s do this.</p>
+<h2>Install Dependencies</h2>
+<p>Apache2, MySQL, OpenSSL are already installed before.</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>sudo yum -y install php php-mysql
+sudo yum -y install httpd-manual mod_ssl mod_perl mod_auth_mysql
+sudo yum -y install php-gd php-xml php-mbstring php-ldap php-pear php-xmlrpc
+sudo yum -y install mysql-connector-odbc mysql-devel libdbi-dbd-mysql
+</pre></td></tr></table></figure>
+
+<h2>Get latest edition of WordPress (Simplified Chinese Version)</h2>
+<p>From <a href="http://cn.wordpress.org/switching/">this page</a>. (You may need to cross the GFW to see it.)</p>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>cd ~/downloads/
+wget http://cn.wordpress.org/wordpress-3.6-zh_CN.tar.gz
+tar zxvf wordpress-3.6-zh_CN.tar.gz
+sudo mkdir /var/www/wordpress
+sudo chown -R apache:apache /var/www/wordpress
+sudo -u apache -H cp -av wordpress/* /var/www/wordpress
+cd /var/www/wordpress
+</pre></td></tr></table></figure>
+
+<h2>Create DB for WordPress</h2>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>mysql -u root -p
+mysql&gt; CREATE DATABASE wordpress DEFAULT CHARACTER SET <span class="string">'utf8'</span>;
+mysql&gt; CREATE USER <span class="string">'wordpress'</span>@<span class="string">'localhost'</span> IDENTIFIED BY <span class="string">'wordpress'</span>;
+mysql&gt; GRANT ALL PRIVILEGES ON wordpress.* TO <span class="string">'wordpress'</span>@<span class="string">'localhost'</span>;
+</pre></td></tr></table></figure>
+
+<a name="more"></a>
+
+<h2>Configure WordPress</h2>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>sudo -u apache -H cp wp-config-sample.php wp-config.php 
+sudo -u apache -H vim wp-config.php
+</pre></td></tr></table></figure>
+
+<p>Edit <code>wp-config.php</code> and modify these values:</p>
+<figure class="highlight lang-php"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre><span class="comment">/* The name of the database for WordPress */</span>
+define(<span class="string">'DB_NAME'</span>, <span class="string">'wordpress'</span>);
+
+<span class="comment">/* MySQL database username */</span>
+define(<span class="string">'DB_USER'</span>, <span class="string">'wordpress'</span>);
+
+<span class="comment">/* MySQL database password */</span>
+define(<span class="string">'DB_PASSWORD'</span>, <span class="string">'wordpress'</span>);
+
+<span class="comment">/* Authentication Unique Keys and Salts. */</span>
+define(<span class="string">'AUTH_KEY'</span>,         <span class="string">'H&gt;(4Ki6SfQkfgvd8]Mrvrb3l[SAG}u4 Z;y+oQyIkCYNr[=6!jGApkt|U56JyrlJ'</span>);
+define(<span class="string">'SECURE_AUTH_KEY'</span>,  <span class="string">'Ap9,x @{r35Z/|F5+z.m+oJBVeM:+H{S|lAq-a/;64+&lCD?B~&gt;k4ahMq]VM9sYS'</span>);
+define(<span class="string">'LOGGED_IN_KEY'</span>,    <span class="string">'y5I8m&gt;lP}.7irF?9q{aW&gt;NlBeGK%_b-O[l|u5U.Q{Bj)i$I5D1DVQhCIPv7J4[l`'</span>);
+define(<span class="string">'NONCE_KEY'</span>,        <span class="string">'Sr1B7,Jpy&8BjQ2Rj+%CW-2+}}nAe(*`J/S1QL1aX#u-yF&gt;&@OEu-.JEr(N&lt;2rB:'</span>);
+define(<span class="string">'AUTH_SALT'</span>,        <span class="string">'5fS&lt;COmVqn{, Az$p{_|zb7--TM%8!Tv}}.aa4{~J1$(KIvk+g;!JG3jLzv^hp-G'</span>);
+define(<span class="string">'SECURE_AUTH_SALT'</span>, <span class="string">'q0x8e(SAAQ8T#;d+4eN#[iVQO9$n}I ^||PeL}&lt;:^HkG-FY+XT_FOB}sai{,a]. '</span>);
+define(<span class="string">'LOGGED_IN_SALT'</span>,   <span class="string">'c}YeFvyl^]:I%^1%M/c[&gt;+??cn=naqU.= SJURU $RoT&r*2o.8Jq)ZT7Y?zD2s2'</span>);
+define(<span class="string">'NONCE_SALT'</span>,       <span class="string">'$Az&gt;XtU4&lt;!hIa[dYVJkH/=Zfc_+M4wdf%].qZemgtSQoZ+iI%h=eTZ)OO3v,2o5F'</span>);
+
+<span class="comment">/* Language for WordPress */</span>
+define(<span class="string">'WPLANG'</span>, <span class="string">'zh_CN'</span>);
+</pre></td></tr></table></figure>
+
+<h2>Add VirtualHost on Apache for WordPress</h2>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>sudo vim /etc/httpd/conf/httpd.conf
+</pre></td></tr></table></figure>
+
+<p>Edit <code>httpd.conf</code> and add these lines:</p>
+<figure class="highlight lang-conf"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="comment"># add a Port for WordPress</span>
+<span class="keyword">Listen</span> 8089
+
+<span class="comment"># add a VirtualHost for WordPress</span>
+<span class="tag">&lt;VirtualHost *:8089&gt;</span>
+   <span class="keyword">ServerName</span> wordpress
+   <span class="keyword">DocumentRoot</span> /var/www/wordpress
+   <span class="keyword">ErrorLog</span> logs/wordpress_error_log
+
+   <span class="tag">&lt;Directory /var/www/wordpress&gt;</span>
+      <span class="keyword">Options</span> Indexes ExecCGI FollowSymLinks
+      <span class="keyword">Order</span> <span class="keyword">allow</span>,<span class="keyword">deny</span>
+      <span class="keyword">Allow</span> from all
+      <span class="keyword">AllowOverride</span> all
+      <span class="keyword">Options</span> -MultiViews
+   <span class="tag">&lt;/Directory&gt;</span>
+<span class="tag">&lt;/VirtualHost&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>BTW, my <code>httpd.conf</code> now has double <code>Listen</code> and two <code>VirtualHost</code>, because I host Redmine on Apache too. And the VirtualHost for Redmine uses Port 8088.</p>
+<h2>Configure Nginx to make WordPress accessible on Port 80</h2>
+<p>This is because I make Nginx listening Port 80, and I have three services need to be accessed from Port 80.</p>
+<p>Add <code>wordpress.conf</code> under directory <code>/etc/nginx/conf.d/</code>, and edit the content as:</p>
+<figure class="highlight lang-conf"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre></td><td class="code"><pre><span class="title">upstream</span> wordpress{
+    <span class="title">server</span> <span class="number">127.0.0.1:8089</span>;
+}
+ 
+<span class="title">server</span> {
+    <span class="title">listen</span> <span class="number">80</span>;
+    <span class="title">server_name</span>  blog.mydomain.com;
+ 
+    <span class="title">access_log</span>  /var/log/nginx/wordpress.access.log  main;
+    <span class="title">error_log</span>  /var/log/nginx/wordpress.<span class="built_in">error</span>.log;
+    <span class="title">root</span>   /var/www/wordpress;
+    <span class="title">index</span>  index.html index.htm index.php;
+ 
+    <span class="comment">## send request back to apache ##</span>
+    <span class="title">location</span> / {
+        <span class="title">proxy_pass</span>  <span class="url">http://wordpress;</span>
+ 
+        <span class="comment">#Proxy Settings</span>
+        <span class="title">proxy_redirect</span>     <span class="built_in">off</span>;
+        <span class="title">proxy_set_header</span>   Host             <span class="variable">$host</span>;
+        <span class="title">proxy_set_header</span>   X-Real-IP        <span class="variable">$remote_addr</span>;
+        <span class="title">proxy_set_header</span>   X-Forwarded-For  <span class="variable">$proxy_add_x_forwarded_for</span>;
+        <span class="title">proxy_next_upstream</span> <span class="built_in">error</span> timeout invalid_header http_500 http_502 http_503 http_504;
+        <span class="title">proxy_max_temp_file_size</span> <span class="number">0</span>;
+        <span class="title">proxy_connect_timeout</span>      <span class="number">90</span>;
+        <span class="title">proxy_send_timeout</span>         <span class="number">90</span>;
+        <span class="title">proxy_read_timeout</span>         <span class="number">90</span>;
+        <span class="title">proxy_buffer_size</span>          <span class="number">4k</span>;
+        <span class="title">proxy_buffers</span>              <span class="number">4</span> <span class="number">32k</span>;
+        <span class="title">proxy_busy_buffers_size</span>    <span class="number">64k</span>;
+        <span class="title">proxy_temp_file_write_size</span> <span class="number">64k</span>;
+   }
+}
+</pre></td></tr></table></figure>
+
+<h2>Restart services</h2>
+<figure class="highlight lang-bash"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>sudo service httpd restart
+sudo service nginx restart
+</pre></td></tr></table></figure>
+
+<p>Then open your web explorer and open this url: <code>http://blog.mydomain.com</code> or <code>http://blog.mydomain.com/wp-admin/install.php</code>.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/system/">System</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/tools/">tools</a>, <a href="/tags/linux/">linux</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.zeekout.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/gtd/">GTD</a><small>1</small></li>
+  
+    <li><a href="/categories/system/">System</a><small>6</small></li>
+  
+    <li><a href="/categories/develop/">develop</a><small>4</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/git/" style="font-size: 15.71px;">git</a><a href="/tags/iOS/" style="font-size: 10.71px;">iOS</a><a href="/tags/ios/" style="font-size: 17.86px;">ios</a><a href="/tags/linux/" style="font-size: 18.57px;">linux</a><a href="/tags/objc/" style="font-size: 11.43px;">objc</a><a href="/tags/objective-c/" style="font-size: 17.14px;">objective-c</a><a href="/tags/other/" style="font-size: 10.00px;">other</a><a href="/tags/rest/" style="font-size: 12.86px;">rest</a><a href="/tags/self/" style="font-size: 15.00px;">self</a><a href="/tags/site/" style="font-size: 16.43px;">site</a><a href="/tags/spring/" style="font-size: 13.57px;">spring</a><a href="/tags/tools/" style="font-size: 19.29px;">tools</a><a href="/tags/toolslinux/" style="font-size: 12.14px;">tools.linux</a><a href="/tags/vim/" style="font-size: 14.29px;">vim</a>
+  </div>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 AngryZ
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'zeekoutblog';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
